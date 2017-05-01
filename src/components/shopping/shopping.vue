@@ -8,7 +8,7 @@
             <div v-show="money > 0" class="cart__goodNum">{{foodCounts}}</div>
         </div>
         <div class="shopping__money">
-            <span class="cartPrice border--vertical--1px" :class="[money > 0 ? 'active' : '']">&yen;&nbsp;{{getNeedMoney}}</span>
+            <span class="cartPrice border--vertical--1px" :class="[money > 0 ? 'active' : '']">&yen;&nbsp;{{money}}</span>
             <span class="deliveryPrice">另需配送费&nbsp;&yen;&nbsp;{{deliveryPrice}}</span>
         </div>
         <div class="shopping__minPrice" :class="[money >= minPrice ? 'active' : '']">
@@ -18,6 +18,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+    import {eventHub} from '@/common/js/eventHub';
     export default {
         data () {
             return {
@@ -37,12 +38,18 @@
                 type: Number
             }
         },
+        created () {
+            eventHub.$on('animateEnd', () => {
+                this.getNeedMoney();
+            });
+            eventHub.$on('subtractFood', () => {
+                this.getNeedMoney();
+            });
+        },
         methods: {
             needMoney () {
                 return this.money;
-            }
-        },
-        computed: {
+            },
             getNeedMoney () {
                 this.sellectFood = [];
                 this.money = 0;
@@ -55,7 +62,9 @@
                     }
                 }));
                 return this.money;
-            },
+            }
+        },
+        computed: {
             minPriceText () {
                 let str;
                 if (this.money <= 0) {

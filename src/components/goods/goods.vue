@@ -17,7 +17,6 @@
                     <li v-for="food in good.foods" class="food__item border--1px">
                         <v-food :food="food"></v-food>
                         <v-food-choose :food="food"></v-food-choose>
-                        <span>{{food.count}}</span>
                     </li>
                 </ul>
             </div>

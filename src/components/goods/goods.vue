@@ -14,13 +14,14 @@
             <div v-for="good in goods" class="list__item" ref="goodItem">
                 <h3 class="list__item__title">{{good.name}}</h3>
                 <ul>
-                    <li v-for="food in good.foods" class="food__item border--1px">
+                    <li v-for="food in good.foods" class="food__item border--1px" @click="sellectFood(food)">
                         <v-food :food="food"></v-food>
-                        <v-food-choose :food="food"></v-food-choose>
+                        <v-food-choose :food="food" class="foodChoose"></v-food-choose>
                     </li>
                 </ul>
             </div>
         </div>
+        <v-food-detail v-if="foodDetail!==null" :food="foodDetail"></v-food-detail>
     </div>
 </template>
 
@@ -28,6 +29,7 @@
     import concession from '@/components/concession/concession';
     import food from '@/components/food/food';
     import foodChoose from '@/components/foodChoose/foodChoose';
+    import foodDetail from '@/components/foodDetail/foodDetail';
     export default {
         props: {
             goods: {
@@ -38,13 +40,15 @@
             return {
                 goodsLen: [],
                 initTop: null,
-                currentTop: null
+                currentTop: null,
+                foodDetail: null
             };
         },
         components: {
             'v-concession': concession,
             'v-food': food,
-            'v-food-choose': foodChoose
+            'v-food-choose': foodChoose,
+            'v-food-detail': foodDetail
         },
         mounted () {
             this.$nextTick(function wait () {
@@ -81,6 +85,9 @@
             scroll (index) {
                 let goodsWrap = this.$refs.goodItem[0].parentNode;
                 goodsWrap.scrollTop = index ? this.goodsLen[index - 1] : 0;
+            },
+            sellectFood (food) {
+                this.foodDetail = food;
             }
         },
         computed: {
@@ -145,6 +152,11 @@
                 .food__item {
                     position: relative;
                     padding: 1.8rem;
+                    .foodChoose {
+                        position: absolute;
+                        bottom: 1.8rem;
+                        right: 1.8rem;
+                    }
                 }
                 .food__item + .food__item {
                     @include border-top-1px(rgba(7, 17, 27, 0.1));

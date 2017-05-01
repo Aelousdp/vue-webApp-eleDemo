@@ -26,6 +26,7 @@
                 this.addFoodAnimate();
             },
             subtractFood () {
+                console.log('--');
                 if (this.food.count > 0) {
                     this.food.count--;
                     eventHub.$emit('subtractFood');
@@ -75,16 +76,15 @@
             }
         },
         created () {
-            Vue.set(this.food, 'count', 0);
+            if (this.food.count === undefined) {
+                Vue.set(this.food, 'count', 0);
+            }
         }
     };
 </script>
 
 <style type="text/scss" lang="scss">
     .food__choose {
-        position: absolute;
-        bottom: 1.8rem;
-        right: 1.8rem;
         font-size: 0;
         .food__subtract,
         .food__add,

@@ -27,7 +27,7 @@ module.exports = {
         // add semi
         'semi': ['error', 'always'],
         // change indent
-        "indent": ["error", 4],
+        "indent": ["error", 4, {'SwitchCase': 1}],
         // allow multiple variable declarations per scope
         "one-var": 0
     }

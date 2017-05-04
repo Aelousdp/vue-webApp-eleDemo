@@ -1,12 +1,12 @@
 <template>
     <div class="food__choose" ref="wrap">
-        <transition name="move">
-            <span class="food__subtract icon-remove_circle_outline" v-show="food.count > 0" @click="subtractFood()"></span>
+        <transition name="move" @after-leave="afterLeave">
+            <span class="food__subtract icon-remove_circle_outline" v-show="food.count > 0" @click.stop="subtractFood()"></span>
         </transition>
         <transition name="fade">
             <span class="food__num" v-show="food.count > 0">{{food.count}}</span>
         </transition>
-        <span class="food__add icon-add_circle" @click="addFood()" ref="add"></span>
+        <span class="food__add icon-add_circle" @click.stop="addFood()" ref="add"></span>
     </div>
 </template>
 
@@ -26,7 +26,6 @@
                 this.addFoodAnimate();
             },
             subtractFood () {
-                console.log('--');
                 if (this.food.count > 0) {
                     this.food.count--;
                     eventHub.$emit('subtractFood');
@@ -73,6 +72,9 @@
                     self.$refs.wrap.removeChild(ballNode);
                 }
                 run();
+            },
+            afterLeave () {
+                eventHub.$emit('afterLeave');
             }
         },
         created () {
@@ -93,6 +95,8 @@
             display: inline-block;
             line-height: 2.4rem;
             font-size: 2.4rem;
+            height: 2.4rem;
+            width: 2.4rem;
             vertical-align: middle;
             color: #15c9ff;
         }

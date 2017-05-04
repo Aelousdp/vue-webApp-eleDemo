@@ -30,6 +30,7 @@
     import food from '@/components/food/food';
     import foodChoose from '@/components/foodChoose/foodChoose';
     import foodDetail from '@/components/foodDetail/foodDetail';
+    import {eventHub} from '@/common/js/eventHub';
     export default {
         props: {
             goods: {
@@ -49,6 +50,11 @@
             'v-food': food,
             'v-food-choose': foodChoose,
             'v-food-detail': foodDetail
+        },
+        created () {
+            eventHub.$on('closeFoodDetail', () => {
+                this.foodDetail = null;
+            });
         },
         mounted () {
             this.$nextTick(function wait () {
@@ -156,6 +162,7 @@
                         position: absolute;
                         bottom: 1.8rem;
                         right: 1.8rem;
+                        z-index: 300;
                     }
                 }
                 .food__item + .food__item {

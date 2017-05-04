@@ -14,7 +14,7 @@
                 </li>
             </ul>
         </nav>
-        <router-view :goods="goods"></router-view>
+        <router-view :goods="goods" :ratings="ratings" :seller="seller"></router-view>
         <v-shopping :minPrice="seller.minPrice" :deliveryPrice="seller.deliveryPrice" :goods="goods"></v-shopping>
     </div>
 </template>
@@ -29,7 +29,8 @@
         data () {
             return {
                 seller: {},
-                goods: []
+                goods: [],
+                ratings: []
             };
         },
         components: {
@@ -47,6 +48,12 @@
                 let res = response.body;
                 if (res.errno === ERR_OK) {
                     this.goods = res.data;
+                }
+            });
+            this.$http.get('/api/ratings').then((response) => {
+                let res = response.body;
+                if (res.errno === ERR_OK) {
+                    this.ratings = res.data;
                 }
             });
         }

@@ -2,6 +2,7 @@
     <div class="foodDetailWrap">
         <section class="food__content">
             <img :src="food.image" alt="食物图片" class="food__image">
+            <span class="icon-close" @click="closeFoodDetail()"></span>
             <div class="food__content__detail content--box">
                 <h1>{{food.name}}</h1>
                 <p class="">
@@ -13,10 +14,12 @@
                     <del v-show="food.oldPrice"><span class="rmb">&yen;</span>{{food.oldPrice}}</del>
                 </p>
             </div>
-            <div v-if="food.count <= 0" class="shopping shopping--style">
-                <span>加入购物车</span>
-            </div>
-            <v-food-choose v-else class="shopping"></v-food-choose>
+            <transition name="changeShopping" @after-leave="afterLeave">
+                <div v-if="showShopping" class="shopping shopping--style" @click="toChoose()">
+                    <span>加入购物车</span>
+                </div>
+            </transition>
+            <v-food-choose v-if="showFoodChoose" class="shopping" :food="food" ref="foodChoose"></v-food-choose>
         </section>
         <v-split></v-split>
         <section class="food__introduce content--box">
@@ -63,7 +66,9 @@
         data () {
             return {
                 ratingsType: 'all',
-                hasContent: false
+                hasContent: false,
+                showShopping: true,
+                showFoodChoose: false
             };
         },
         props: {
@@ -77,11 +82,26 @@
             'v-choose-rating': chooseRating
         },
         created () {
+            if (this.food.count === 0) {
+                this.showShopping = true;
+                this.showFoodChoose = false;
+            } else {
+                this.showShopping = false;
+                this.showFoodChoose = true;
+            }
             eventHub.$on('getRatings', (type) => {
                 this.ratingsType = type;
             });
             eventHub.$on('hasContent', (bool) => {
                 this.hasContent = bool;
+            });
+
+            // 接收subtract动画完成事件
+            eventHub.$on('afterLeave', () => {
+                if (this.food.count === 0) {
+                    this.showShopping = true;
+                    this.showFoodChoose = false;
+                }
             });
         },
         computed: {
@@ -107,6 +127,15 @@
             }
         },
         methods: {
+            toChoose () {
+                this.showShopping = false;
+            },
+            afterLeave () {
+                this.showFoodChoose = true;
+                this.$nextTick(() => {
+                    this.$refs.foodChoose.addFood();
+                });
+            },
             getTime (time) {
                 let date = new Date(time),
                     dateObj = {
@@ -137,6 +166,9 @@
                         break;
                 }
                 return false;
+            },
+            closeFoodDetail () {
+                eventHub.$emit('closeFoodDetail');
             }
         }
     };
@@ -150,7 +182,7 @@
         top: 0;
         right: 0;
         bottom: 4.6rem;
-        z-index: 100;
+        z-index: 400;
         background-color: #ffffff;
         overflow: auto;
         .content--box {
@@ -171,6 +203,14 @@
             color: rgb(147, 153, 159);
             .food__image {
                 width: 100%;
+            }
+            .icon-close {
+                position: absolute;
+                left: 2rem;
+                top:2rem;
+                font-size: 2rem;
+                color: #ffffff;
+                background-color: rgba(147, 153, 159, 0.5);
             }
             .food__content__detail {
                 h1 {
@@ -227,6 +267,35 @@
                 text-align: center;
                 color: #ffffff;
                 background-color: rgb(0, 160, 220);
+            }
+            .changeShopping-enter-active {
+                animation: shopping-in 0.4s;
+            }
+            .changeShopping-leave-active {
+                animation: shopping-out 0.4s;
+            }
+            @keyframes shopping-in {
+                0% {
+                    color: transparent;
+                    width: 2.4rem;
+                }
+                99% {
+                    color: transparent;
+                }
+                100% {
+                    color: #ffffff;
+                    width: 7.4rem;
+                }
+            }
+            @keyframes shopping-out {
+                0% {
+                    color: transparent;
+                }
+
+                100% {
+                    color: transparent;
+                    width: 2.0rem;
+                }
             }
         }
         .food__introduce {

@@ -128,7 +128,7 @@
         height: 4.6rem;
         width: 100%;
         color: rgba(255, 255, 255, 0.4);
-        z-index: 200;
+        z-index: 1000;
         background-color: #141d27;
         .shopping__cart {
             margin: 0 1.8rem 0.8rem;

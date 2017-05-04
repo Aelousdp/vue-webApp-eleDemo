@@ -75,7 +75,7 @@
             height: 1.5rem;
         }
         .star + .star {
-            margin-left: 1.5rem;
+            margin-left: 0.7rem;
         }
         .star--on {
             @include img-dpi('star36_on')
@@ -93,7 +93,7 @@
             height: 1rem;
         }
         .star + .star {
-            margin-left: 1rem;
+            margin-left: 0.5rem;
         }
         .star--on {
             @include img-dpi('star24_on')

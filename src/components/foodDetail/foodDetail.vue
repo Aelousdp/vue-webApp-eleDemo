@@ -62,6 +62,7 @@
     import split from '@/components/split/split';
     import chooseRating from '@/components/chooseRating/chooseRating';
     import {eventHub} from '@/common/js/eventHub';
+    import {getTime} from '@/common/js/getTime';
     export default {
         data () {
             return {
@@ -137,15 +138,7 @@
                 });
             },
             getTime (time) {
-                let date = new Date(time),
-                    dateObj = {
-                        dateStr: `${date.getFullYear()}-${this.isSingleNum(date.getMonth())}-${this.isSingleNum(date.getDate())}`,
-                        timeStr: `${date.getHours()}:${date.getMinutes()}`
-                    };
-                return dateObj;
-            },
-            isSingleNum (num) {
-                return ('' + num).split('').length === 1 ? '0' + num : num;
+                return getTime(time);
             },
             __hasContent (text) {
                 return !this.hasContent ? true : text !== '';

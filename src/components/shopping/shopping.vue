@@ -219,9 +219,9 @@
                     font-weight: 700;
                 }
             }
-
             &.active {
-                color: #141d27;
+                font-size: 1.4rem;
+                color: #ffffff;
                 background-color: #15c9ff;
             }
         }

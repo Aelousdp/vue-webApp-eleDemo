@@ -14,7 +14,9 @@
                 </li>
             </ul>
         </nav>
-        <router-view :goods="goods" :ratings="ratings" :seller="seller"></router-view>
+        <keep-alive>
+            <router-view :goods="goods" :ratings="ratings" :seller="seller"></router-view>
+        </keep-alive>
         <v-shopping :minPrice="seller.minPrice" :deliveryPrice="seller.deliveryPrice" :goods="goods"></v-shopping>
     </div>
 </template>

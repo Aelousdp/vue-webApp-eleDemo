@@ -108,6 +108,11 @@
             text-align: center;
             font-size: 1rem;
         }
+        @media only screen and (max-width: 350px) {
+            .food__num {
+                width: 1.4rem;
+            }
+        }
         .animateBall {
             position: fixed;
             height: 1.7rem;

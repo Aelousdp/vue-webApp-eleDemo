@@ -10,7 +10,7 @@
     
 使用
 
-    npm init
+    npm install
     npm run dev
     
 打包生成
